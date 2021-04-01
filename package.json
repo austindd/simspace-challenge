@@ -27,6 +27,7 @@
     "web-vitals": "^1.0.1"
   },
   "devDependencies": {
+    "@babel/preset-typescript": "^7.13.0",
     "@rescripts/cli": "^0.0.16"
   },
   "scripts": {
@@ -35,7 +36,7 @@
     "test": "rescripts test",
     "eject": "rescripts eject",
     "dev:server": "cd server && tsc ./*.ts --outDir ./js/ && node ./js/api-proxy.js --experimental-modules",
-    "dev": ""
+    "dev": "npm-run-all dev:server dev:client"
   },
   "eslintConfig": {
     "extends": [
