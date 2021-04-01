@@ -53,22 +53,22 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ],
-    "rescripts": [
-      [
-        "use-babel-config",
-        {
-          "presets": [
-            "react-app",
-            [
-              "@babel/preset-typescript",
-              {
-                "allowNamespaces": true
-              }
-            ]
-          ]
-        }
-      ]
     ]
-  }
+  },
+  "rescripts": [
+    [
+      "use-babel-config",
+      {
+        "presets": [
+          "react-app",
+          [
+            "@babel/preset-typescript",
+            {
+              "allowNamespaces": true
+            }
+          ]
+        ]
+      }
+    ]
+  ]
 }
