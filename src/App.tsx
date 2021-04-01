@@ -1,24 +1,42 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
+import * as Api from "./data/api-data";
+import {pipe} from "fp-ts/pipeable";
+import * as E from "fp-ts/Either";
+import * as TE from "fp-ts/TaskEither";
 
 function App() {
+
+  React.useEffect(() => {
+    Api.Get.listOfAllBreeds().then((result) => {
+      pipe(
+        result,
+        E.fold(console.error, console.log)
+      )
+    })
+  })
+
+  React.useEffect(() => {
+    Api.Get.imagesOfBreed("hound")().then((result) => {
+      pipe(
+        result,
+        E.fold(console.error, console.log)
+      )
+    })
+  })
+
+  React.useEffect(() => {
+    Api.Get.subBreedsOfBreed("hound")().then((result) => {
+      pipe(
+        result,
+        E.fold(console.error, console.log)
+      )
+    })
+  })
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
     </div>
   );
 }

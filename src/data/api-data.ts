@@ -13,7 +13,7 @@ const {
 export namespace Url {
   export const BASE_URL = REACT_APP_DOG_API_BASE_URL
   export const breeds_list_all = BASE_URL + "/breeds/list/all"
-  export const breed_list = (breed: string) => BASE_URL + "/" + breed + "/list";
+  export const breed_list = (breed: string) => BASE_URL + "/breed/" + breed + "/list";
   export const breed_images = (breed: string) => BASE_URL + "/breed/" + breed + "/images";
 }
 
@@ -115,7 +115,7 @@ export namespace Get {
     return () => {
       return stagedBreedsOfBreed().then(E.chain(
         (value) => {
-          let result = Codecs.imagesOfBreed.decode(value);
+          let result = Codecs.subBreedsOfBreed.decode(value);
           let res: E.Either<Error, SubBreedsOfBreed> = pipe(
             result,
             E.fold(
@@ -133,14 +133,13 @@ export namespace Get {
     };
   }
 
-  export const imagesOfBreed: (breed: string) => TE.TaskEither<Error, ImagesOfBreed> =
-    (breed: string) => {
+  export const imagesOfBreed: (breed: string) => TE.TaskEither<Error, ImagesOfBreed> = (breed: string) => {
       const stagedSubBreedsOfBreed = stageFetch(Url.breed_images(breed), {
         method: "GET",
         headers: HEADERS,
         body: null,
       });
-      return () => {
+      const thunk: TE.TaskEither<Error, ImagesOfBreed> = () => {
         return stagedSubBreedsOfBreed().then(E.chain(
           (value) => {
             let result = Codecs.imagesOfBreed.decode(value);
@@ -159,6 +158,7 @@ export namespace Get {
           }
         ));
       }
+      return thunk;
     };
 
 }
