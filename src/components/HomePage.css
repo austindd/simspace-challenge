@@ -1,3 +1,21 @@
-.homepage-dog-image {
-  width: 120px;
+
+.homepage-dog-buttons-section-wrapper {
+  width: auto;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.homepage-dog-images-section-wrapper {
+  width: auto;
+  padding-left: 40px;
+  padding-right: 40px;
+}
+
+.homepage-content-block {
+  display: flex;
+  justify-content: center;
+}
+
+.homepage-content-block > div {
+  width: 90%;
 }

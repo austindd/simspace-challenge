@@ -1,0 +1,19 @@
+.dog-buttons-section {
+  height: 100%;
+  width: 100%;
+  margin: 10px;
+}
+
+.dog-buttons-section-matrix {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 4px;
+}
+
+.dog-buttons-section-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 4px;
+}
+

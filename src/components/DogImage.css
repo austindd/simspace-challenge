@@ -1,0 +1,15 @@
+.dog-image-wrapper {
+  display: inline-block;
+  width: auto;
+  height: 220px;
+  width: 220px;
+  vertical-align: top;
+  margin: 4px;
+}
+
+.dog-image-img-element {
+  width: 100%;
+  min-height: 80%;
+  max-height: 100%;
+  object-fit: cover;
+}

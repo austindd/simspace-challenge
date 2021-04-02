@@ -1,0 +1,19 @@
+.dog-button-wrapper {
+  width: 22%;
+  max-width: 240px;
+  height: auto;
+  margin-top: 2px;
+  margin-bottom: 2px;
+  margin-left: 6px;
+  margin-right: 6px;
+}
+
+.dog-button-button-element {
+  width: 100%;
+  height: 22px;
+  border: none;
+  border-radius: 2px;
+  background-color: #d9d9d9;
+}
+
+
