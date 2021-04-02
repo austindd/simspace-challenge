@@ -5,38 +5,16 @@ import * as Api from "./data/api-data";
 import {pipe} from "fp-ts/pipeable";
 import * as E from "fp-ts/Either";
 import * as TE from "fp-ts/TaskEither";
+import {DogDataProvider, HomePage} from './components';
+
 
 function App() {
 
-  React.useEffect(() => {
-    Api.Get.listOfAllBreeds().then((result) => {
-      pipe(
-        result,
-        E.fold(console.error, console.log)
-      )
-    })
-  })
-
-  React.useEffect(() => {
-    Api.Get.imagesOfBreed("hound")().then((result) => {
-      pipe(
-        result,
-        E.fold(console.error, console.log)
-      )
-    })
-  })
-
-  React.useEffect(() => {
-    Api.Get.subBreedsOfBreed("hound")().then((result) => {
-      pipe(
-        result,
-        E.fold(console.error, console.log)
-      )
-    })
-  })
-
   return (
     <div className="App">
+      <DogDataProvider>
+        <HomePage />
+      </DogDataProvider>
     </div>
   );
 }
