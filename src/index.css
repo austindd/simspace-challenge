@@ -11,3 +11,28 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+h1, h2, h3, h4, h5, h6, p, span, button, input {
+  font-family: 'Rubik', sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: #4d4dff;
+  letter-spacing: 0.1px;
+}
+
+h1 {
+  font-weight: 400;
+}
+
+
+textarea:focus, input:focus, button:focus {
+  outline: none;
+}
+
+div {
+  margin: 0;
+  padding: 0;
+}
+
+

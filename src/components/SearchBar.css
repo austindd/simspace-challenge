@@ -1,0 +1,16 @@
+.search-bar-input-element-wrapper {
+  border: 0.1px solid lightgrey;
+  border-radius: 1px;
+  box-shadow: 1px 1px 3px lightgrey;
+  font-family: "Rubik", sans-serif;
+}
+
+.search-bar-input-element {
+  border: none;
+  margin-left: 8px;
+  margin-right: 8px;
+  margin-top: 3px;
+  margin-bottom: 5px;
+}
+
+

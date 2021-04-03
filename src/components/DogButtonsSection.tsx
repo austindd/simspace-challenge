@@ -11,13 +11,27 @@ export const DogButtonsSection: React.FC = () => {
 
   const {state, dispatch} = React.useContext(DogDataContext);
 
+  console.log(state);
+
   const dogButtonMatrix = React.useMemo(() => pipe(
     state.breedListMatches,
     O.fold(
       () => null,
       (list) => list.reduce((rows: React.ReactElement[][], breedName) => {
         const dogButton = (
-          <DogButton onClick={(_event) => dispatch({tag: "SetSelectedBreed", selectedBreed: O.some(breedName)})}>
+          <DogButton
+            selected={
+              pipe(
+                state.selectedBreed,
+                O.fold(
+                  () => false,
+                  (selectedBreed) => {
+                    return selectedBreed === breedName
+                  }
+                )
+              )}
+            onClick={(_event) => dispatch({tag: "SetSelectedBreed", selectedBreed: O.some(breedName)})}
+          >
             {breedName}
           </DogButton>
         );
@@ -34,7 +48,7 @@ export const DogButtonsSection: React.FC = () => {
         return rows;
       }, [[]])
     )
-  ), [state.breedListMatches]);
+  ), [state.selectedBreed, state.breedListMatches]);
 
   const dogButtonElements = dogButtonMatrix?.map((dogButtonRow) => {
     return (

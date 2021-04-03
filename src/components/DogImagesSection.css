@@ -1,0 +1,12 @@
+.dog-images-section {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  background-color: #d9d9d9;
+  height: 100%;
+}
+
+.dog-images-section-inner-spacer {
+  margin: 28px;
+}
+

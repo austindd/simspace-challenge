@@ -1,4 +1,5 @@
 import React from "react";
+import "./DogImagesSection.css";
 import {DogDataContext} from ".";
 import {pipe} from "fp-ts/pipeable";
 import * as O from "fp-ts/Option";

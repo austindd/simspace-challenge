@@ -17,5 +17,17 @@
 }
 
 .homepage-content-block > div {
-  width: 90%;
+  width: 80%;
+}
+
+.homepage-app-header-section {
+  height: 80px;
+}
+
+.homepage-dog-buttons-section {
+  height: 150px;
+}
+
+.homepage-dog-images-section {
+  height: auto;
 }

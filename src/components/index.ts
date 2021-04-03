@@ -5,6 +5,7 @@ import {SearchBar} from "./SearchBar";
 import {DogImage} from "./DogImage";
 import {DogImagesSection} from "./DogImagesSection";
 import {DogButtonsSection} from "./DogButtonsSection";
+import {AppHeaderSection} from "./AppHeaderSection";
 
 export {
   DogDataContext,
@@ -15,5 +16,6 @@ export {
   DogImage,
   DogImagesSection,
   DogButtonsSection,
+  AppHeaderSection,
 };
 

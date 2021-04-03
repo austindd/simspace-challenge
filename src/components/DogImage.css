@@ -1,8 +1,8 @@
 .dog-image-wrapper {
   display: inline-block;
-  width: auto;
-  height: 220px;
-  width: 220px;
+  width: 24%;
+  height: auto;
+  max-height: 20em;
   vertical-align: top;
   margin: 4px;
 }

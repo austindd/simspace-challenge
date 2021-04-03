@@ -5,7 +5,7 @@ import {pipe} from "fp-ts/pipeable";
 import * as O from "fp-ts/Option";
 import * as E from "fp-ts/Either";
 import * as Record from "fp-ts/Record";
-import {SearchBar, DogButton, DogImagesSection} from '.';
+import {SearchBar, DogButton, DogImagesSection, AppHeaderSection} from '.';
 import {DogButtonsSection} from './DogButtonsSection';
 
 const dogImageElementCache: Record<string, React.ReactElement> = {};
@@ -15,16 +15,13 @@ export const HomePage = () => {
 
   return (
     <div>
-      <div>
-        <SearchBar onChange={(event) => {
-          console.log(event.target.value)
-          dispatch({tag: "SetSearchTerm", searchTerm: O.some(event.target.value)})
-        }} />
+      <div className="homepage-content-block homepage-app-header-section">
+        <AppHeaderSection />
       </div>
-      <div className="homepage-content-block">
+      <div className="homepage-content-block homepage-dog-buttons-section">
         <DogButtonsSection />
       </div>
-      <div className="homepage-content-block">
+      <div className="homepage-content-block homepage-dog-images-section">
         <DogImagesSection />
       </div>
     </div>
