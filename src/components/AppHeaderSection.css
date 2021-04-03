@@ -1,6 +1,7 @@
 .app-header-section {
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   width: 100%;
   margin-left: 10px;
   margin-right: 10px;
@@ -14,10 +15,30 @@
   margin-right: 8px;
 }
 
-.app-header-section-search-bar-wrapper {
-  display: flex;
+.app-header-section-search-mode-selector-wrapper {
+  display: inline-flex;
   flex-direction: column;
   justify-content: center;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.app-header-section-search-bar-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: 8px;
+  margin-right: 8px;
+}
+
+.app-header-section-search-block {
+  margin: auto;
+}
+
+.app-header-section-search-block-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   margin-left: 8px;
   margin-right: 8px;
 }

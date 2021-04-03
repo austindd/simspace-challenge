@@ -17,51 +17,65 @@ export const DogButtonsSection: React.FC = () => {
     state.breedListMatches,
     O.fold(
       () => null,
-      (list) => list.reduce((rows: React.ReactElement[][], breedName) => {
-        const dogButton = (
-          <DogButton
-            selected={
-              pipe(
-                state.selectedBreed,
-                O.fold(
-                  () => false,
-                  (selectedBreed) => {
-                    return selectedBreed === breedName
-                  }
-                )
-              )}
-            onClick={(_event) => dispatch({tag: "SetSelectedBreed", selectedBreed: O.some(breedName)})}
-          >
-            {breedName}
-          </DogButton>
-        );
-        const currentRowIndex = rows.length - 1;
-        const currentRow = rows[currentRowIndex];
-        if (currentRow.length >= 4) {
-          const nextRowIndex = currentRowIndex + 1;
-          const nextRow: React.ReactElement[] = [];
-          rows[nextRowIndex] = nextRow;
-          nextRow.push(dogButton);
+      (list) => {
+        if (list.length < 1) {
+          return null;
         } else {
-          currentRow.push(dogButton)
+          return list.reduce((rows: React.ReactElement[][], breedName) => {
+            const dogButton = (
+              <DogButton
+                selected={
+                  pipe(
+                    state.selectedBreed,
+                    O.fold(
+                      () => false,
+                      (selectedBreed) => {
+                        return selectedBreed === breedName
+                      }
+                    )
+                  )}
+                onClick={(_event) => dispatch({tag: "SetSelectedBreed", selectedBreed: O.some(breedName)})}
+              >
+                {breedName}
+              </DogButton>
+            );
+            const currentRowIndex = rows.length - 1;
+            const currentRow = rows[currentRowIndex];
+            if (currentRow.length >= 4) {
+              const nextRowIndex = currentRowIndex + 1;
+              const nextRow: React.ReactElement[] = [];
+              rows[nextRowIndex] = nextRow;
+              nextRow.push(dogButton);
+            } else {
+              currentRow.push(dogButton)
+            }
+            return rows;
+          }, [[]]);
         }
-        return rows;
-      }, [[]])
+      }
     )
   ), [state.selectedBreed, state.breedListMatches]);
 
-  const dogButtonElements = dogButtonMatrix?.map((dogButtonRow) => {
-    return (
-      <div className="dog-buttons-section-row">
-        {dogButtonRow}
-      </div>
-    );
-  });
+  const dogButtonRows =
+    dogButtonMatrix?.map((dogButtonRow) => {
+      return (
+        <div className="dog-buttons-section-row">
+          {dogButtonRow}
+        </div>
+      );
+    }) || null;
+
+
+  const dogButtons = dogButtonRows
+    ? dogButtonRows
+    : <h2>{"No breed matches found"}</h2>
+
+  console.log({dogButtonRows, dogButtons});
 
   return (
     <div className="dog-buttons-section">
       <div className="dog-buttons-section-matrix">
-        {dogButtonElements}
+        {dogButtons}
       </div>
     </div>
   );

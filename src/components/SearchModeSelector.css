@@ -1,0 +1,29 @@
+.search-mode-selector-button {
+  border: none;
+  background-color: #d9d9d9;
+  color: #000000;
+  height: 22px;
+  font-size: 12px;
+}
+
+.search-mode-selector-button.right {
+  border-left: 1px solid #cc99ff;
+  border-radius: 0px 3px 3px 0px;
+}
+
+.search-mode-selector-button.left {
+  border-right: 1px solid #cc99ff;
+  border-radius: 3px 0px 0px 3px;
+}
+
+.search-mode-selector-button.selected {
+  color: #ffffff;
+}
+
+.search-mode-selector-button.right.selected {
+  background: linear-gradient(90deg, #cc99ff, #4747d1);
+}
+
+.search-mode-selector-button.left.selected {
+  background: linear-gradient(90deg, #4747d1, #cc99ff);
+}

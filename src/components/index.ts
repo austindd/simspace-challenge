@@ -6,6 +6,8 @@ import {DogImage} from "./DogImage";
 import {DogImagesSection} from "./DogImagesSection";
 import {DogButtonsSection} from "./DogButtonsSection";
 import {AppHeaderSection} from "./AppHeaderSection";
+import {LoadingIndicator} from "./LoadingIndicator";
+import {SearchModeSelector} from "./SearchModeSelector";
 
 export {
   DogDataContext,
@@ -17,5 +19,7 @@ export {
   DogImagesSection,
   DogButtonsSection,
   AppHeaderSection,
+  LoadingIndicator,
+  SearchModeSelector,
 };
 

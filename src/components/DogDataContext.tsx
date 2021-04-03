@@ -3,9 +3,14 @@ import * as Api from "../data/api-data";
 import {pipe} from "fp-ts/pipeable";
 import * as O from "fp-ts/Option";
 import * as E from "fp-ts/Either";
-import * as TE from "fp-ts/TaskEither";
-import * as Record from 'fp-ts/Record';
-import {compareLocaleStringAscending} from "../lib/utils"
+//import * as TE from "fp-ts/TaskEither";
+//import * as Record from 'fp-ts/Record';
+import {compareLocaleStringAscending} from "../lib/utils";
+import levenshtein from "fast-levenshtein";
+
+export type SearchMode =
+  | "alphabetical"
+  | "fuzzyMatch";
 
 export type state = {
   listOfAllBreeds: O.Option<string[]>,
@@ -13,10 +18,12 @@ export type state = {
   selectedBreedSubBreeds: O.Option<string[]>,
   selectedBreedImages: O.Option<string[]>,
   searchTerm: O.Option<string>,
+  searchMode: SearchMode,
   breedListMatches: O.Option<string[]>,
 }
 
 export type SetSearchTerm = {tag: "SetSearchTerm", searchTerm: O.Option<string>}
+export type SetSearchMode = {tag: "SetSearchMode", searchMode: "alphabetical" | "fuzzyMatch"}
 export type SetSelectedBreed = {tag: "SetSelectedBreed", selectedBreed: O.Option<string>}
 export type SetSelectedBreedSubBreeds = {tag: "SetSelectedBreedSubBreeds", selectedBreedSubBreeds: O.Option<string[]>}
 export type SetSelectedBreedImages = {tag: "SetSelectedBreedImages", selectedBreedImages: O.Option<string[]>}
@@ -26,6 +33,7 @@ export type ReplaceState = {tag: "ReplaceState", nextState: state}
 
 type internalAction =
   | SetSearchTerm
+  | SetSearchMode
   | SetSelectedBreed
   | SetSelectedBreedSubBreeds
   | SetSelectedBreedImages
@@ -35,6 +43,7 @@ type internalAction =
 
 export type action =
   | SetSearchTerm
+  | SetSearchMode
   | SetSelectedBreed
 
 export const reducer = (prevState: state, action: internalAction): state => {
@@ -57,6 +66,9 @@ export const reducer = (prevState: state, action: internalAction): state => {
     case "SetBreedListMatches": {
       return {...prevState, breedListMatches: action.breedListMatches};
     }
+    case "SetSearchMode": {
+      return {...prevState, searchMode: action.searchMode}
+    }
     case "ReplaceState": {
       return action.nextState;
     }
@@ -70,6 +82,7 @@ export type context = {
 
 export const initialState: state = {
   searchTerm: O.none,
+  searchMode: "alphabetical",
   listOfAllBreeds: O.none,
   selectedBreed: O.none,
   selectedBreedSubBreeds: O.none,
@@ -105,6 +118,20 @@ function sortAlphabetically(list: string[]) {
   return list.slice().sort(compareLocaleStringAscending);
 }
 
+const sortByFuzzyMatch = (match: string) => (list: string[]) => {
+  const pairs: Array<[number, string]> = list.map((word) => {
+    let ranking = word.includes(match) ? 0 : levenshtein.get(match, word);
+    return [ranking, word];
+  });
+  return (
+    pairs
+      .sort(([rankA, _wordA], [rankB, _wordB]) => {
+        return rankA < rankB ? -1 : rankA === rankB ? 0 : 1;
+      })
+      .map(([_rank, item]) => item)
+  );
+}
+
 export const DogDataContext: React.Context<context> = React.createContext<context>({
   state: initialState,
   dispatch: (_action) => initialState,
@@ -113,10 +140,11 @@ export const DogDataContext: React.Context<context> = React.createContext<contex
 export const DogDataProvider: React.FC = ({children}) => {
 
   const [state, setState] = React.useState(() => initialState);
-  const [currentSearchTerm, setCurrentSearchTerm] = React.useState<O.Option<string>>(O.none);
-  const [currentSelectedBreed, setCurrentSelectedBreed] = React.useState<O.Option<string>>(O.none);
+  const [currentSearchTerm, setCurrentSearchTerm] = React.useState<O.Option<string>>(initialState.searchTerm);
+  const [currentSearchMode, setCurrentSearchMode] = React.useState<SearchMode>(initialState.searchMode);
+  const [currentSelectedBreed, setCurrentSelectedBreed] = React.useState<O.Option<string>>(initialState.selectedBreed);
 
-  console.log({state, currentSearchTerm, currentSelectedBreed, });
+  console.log({state, currentSearchTerm, currentSelectedBreed, currentSearchMode});
 
   const dispatch = React.useMemo(() => {
     return function (action: action) {
@@ -131,6 +159,9 @@ export const DogDataProvider: React.FC = ({children}) => {
               }
             })
           )
+        }
+        case "SetSearchMode": {
+          return setCurrentSearchMode(action.searchMode);
         }
         case "SetSelectedBreed": {
           return setCurrentSelectedBreed(action.selectedBreed);
@@ -147,10 +178,21 @@ export const DogDataProvider: React.FC = ({children}) => {
         return {
           ...prevState,
           listOfAllBreeds: O.some(breedList),
-        }
+        };
       }))
     }
   }, [state.listOfAllBreeds]);
+
+  React.useEffect(() => {
+    if (currentSearchMode !== state.searchMode) {
+      setState((prevState) => {
+        return {
+          ...prevState,
+          searchMode: currentSearchMode,
+        };
+      })
+    }
+  }, [currentSearchMode])
 
   React.useEffect(() => {
     pipe(
@@ -164,7 +206,12 @@ export const DogDataProvider: React.FC = ({children}) => {
                 listOfAllBreeds,
                 O.fold(
                   () => O.none,
-                  (breedList) => O.some(getFirstTwelveOrLess(sortAlphabetically(breedList)))
+                  (breedList) => pipe(
+                    breedList,
+                    sortAlphabetically,
+                    getFirstTwelveOrLess,
+                    O.some
+                  )
                 )
               )
             };
@@ -173,7 +220,6 @@ export const DogDataProvider: React.FC = ({children}) => {
           pipe(
             listOfAllBreeds,
             O.fold(() => {
-              console.warn("ListOfAllBreeds Not Loaded Yet")
               return setState((prevState) => {
                 return {
                   ...prevState,
@@ -182,23 +228,31 @@ export const DogDataProvider: React.FC = ({children}) => {
               });
             }, (breedList) => {
               return setState((prevState) => {
+                const breedListMatches =
+                  state.searchMode === "fuzzyMatch"
+                    ? pipe(
+                        breedList,
+                        sortByFuzzyMatch(currentSearchTerm),
+                        getFirstTwelveOrLess,
+                        O.some
+                      )
+                    : pipe(
+                        breedList.filter((breedName) => breedName.includes(currentSearchTerm)),
+                        sortAlphabetically,
+                        getFirstTwelveOrLess,
+                        O.some
+                      );
                 return {
                   ...prevState,
                   searchTerm: O.some(currentSearchTerm),
-                  breedListMatches: O.some(
-                    getFirstTwelveOrLess(
-                      sortAlphabetically(
-                        breedList.filter((breedName) => breedName.includes(currentSearchTerm))
-                      )
-                    )
-                  )
+                  breedListMatches: breedListMatches,
                 }
               })
             })
           );
         }
       ))
-  }, [currentSearchTerm, state.listOfAllBreeds]);
+  }, [currentSearchTerm, state.searchMode, state.listOfAllBreeds]);
 
   React.useEffect(() => {
     pipe(currentSelectedBreed,
