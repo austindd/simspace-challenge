@@ -36,11 +36,11 @@
   },
   "scripts": {
     "dev:client": "rescripts start",
+    "dev:server": "cd server && tsc ./*.ts --outDir ./js/ && node ./js/api-proxy.js --experimental-modules",
+    "dev": "npm-run-all --parallel dev:server dev:client",
     "build": "rescripts build",
     "test": "rescripts test",
-    "eject": "rescripts eject",
-    "dev:server": "cd server && tsc ./*.ts --outDir ./js/ && node ./js/api-proxy.js --experimental-modules",
-    "dev": "npm-run-all dev:server dev:client"
+    "eject": "rescripts eject"
   },
   "eslintConfig": {
     "extends": [
