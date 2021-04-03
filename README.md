@@ -2,9 +2,11 @@
 
 ## Development Quick-Start
 
+Start by cloning the repo and running `yarn` to download the dependencies.
+
 There are 2 ways to start up the dev environment:
   1. In one terminal window, run `yarn dev:server` to start the API proxy server, which allows you to get around any CORS issues during development. In a second terminal window, run `yarn dev:client` to start the usual CRA dev server, which should open the app in your browser.
-  2. Run `yarn dev`. This executes the `dev:server` and `dev:client` scripts in parallel in a single terminal window.
+  2. Run `yarn dev`. This executes the `dev:server` and `dev:client` scripts in parallel in a single terminal window. In some cases, the client app will load before the server is fully started, so the API data won't load properly. If this happens, just refresh the page after the server starts.
 
 ## Architecture
 
