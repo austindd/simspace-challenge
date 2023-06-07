@@ -5,12 +5,12 @@
 Start by cloning the repo and running `yarn` to download the dependencies.
 
 There are 2 ways to start up the dev environment:
-  1. In one terminal window, run `yarn dev:server` to start the API proxy server, which allows you to get around any CORS issues during development. In a second terminal window, run `yarn dev:client` to start the usual CRA dev server, which should open the app in your browser.
+  1. In one terminal window, run `yarn dev:server` to start the API proxy server, which I added for personal practice. In a second terminal window, run `yarn dev:client` to start the usual CRA dev server, which should open the app in your browser.
   2. Run `yarn dev`. This executes the `dev:server` and `dev:client` scripts in parallel in a single terminal window. In some cases, the client app will load before the server is fully started, so the API data won't load properly. If this happens, just refresh the page after the server starts.
 
 ## Architecture
 
-Just a few notes about the development workflow... The API we are fetching from will not allow requests from `localhost` due to CORS issues. So I hacked together a proxy server (located at `./server/api-proxy.ts`), so we are fetching the data through that server during development. For production, I would just specify the real endpoint in the `.env` file.
+For the data fetching, I put together a local proxy server (located at `./server/api-proxy.ts`) that fetches the data and passes it through to the client. This could be updated to transform the data or store it in a database, but this was mostly just for personal practice.
 
 As for the front-end, the architecture is just a set of relatively independent components, which use a sort of state-reducer pattern for state management. This "reducer" is really a React context provider, which handles actions from consumers, and propagates the state to each component that needs it.
 
@@ -18,7 +18,7 @@ As for CSS styles, I really like libraries like Bootstrap and Tailwind, but I de
 
 ### State Management
 
-The state-management could be accomplished in a simpler way with a true reducer pattern, like `React.useReducer` or `redux`. However, I started with a context provider, and rather than rebuilding it from the ground up, I ended up evolving it into a makeshift state-reducer. If I had more time, I would probably refactor this, but it works well for now.
+The state-management could be accomplished in a simpler way with a true reducer pattern, like `useReducer` or `redux`. However, I started with a context provider, and rather than rebuilding it from the ground up, I ended up evolving it into a makeshift state-reducer. If I had more time, I would probably refactor this, but it works well for now.
 
 ### Data Models
 
